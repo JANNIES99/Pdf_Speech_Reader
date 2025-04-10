@@ -25,8 +25,11 @@ class _MyAppState extends State<MyApp> {
     flutterTts.getVoices.then((data) {
       try {
         List<Map> voices = List<Map>.from(data);
+        voices = voices.where((voice) => voice["name"].contains("en")).toList();
         print(voices);
-        setState(() {});
+        setState(() {
+          currentVoice = voices.first;
+        });
       } catch (e) {
         print(e);
       }
