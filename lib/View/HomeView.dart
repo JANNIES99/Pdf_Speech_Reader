@@ -17,16 +17,20 @@ class _HomeviewState extends State<Homeview> {
       ),
       backgroundColor: const Color.fromARGB(255, 255, 248, 220),
       body: Column(children: []),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        backgroundColor: const Color.fromARGB(255, 220, 0, 0),
-        shape: CircleBorder(
-          side: BorderSide(
-            width: 15,
-            color: const Color.fromARGB(255, 220, 0, 0),
+      floatingActionButton: SizedBox(
+        height: 70,
+        width: 70,
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: const Color.fromARGB(255, 220, 0, 0),
+          shape: CircleBorder(
+            side: BorderSide(
+              width: 15,
+              color: const Color.fromARGB(255, 220, 0, 0),
+            ),
           ),
+          child: Icon(Icons.add, color: Colors.black, size: 30),
         ),
-        child: Icon(Icons.add, color: Colors.black),
       ),
     );
   }
