@@ -14,7 +14,8 @@ class Homeview extends StatefulWidget {
 class _HomeviewState extends State<Homeview> {
   void pickFiles() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowedExtensions: ['jpg', 'png', 'pdf'],
+      type: FileType.custom,
+      allowedExtensions: ['jpg', 'pdf', 'png'],
     );
 
     if (result != null) {
@@ -26,7 +27,7 @@ class _HomeviewState extends State<Homeview> {
   }
 
   Future _fileAccess() async {
-    var status = await Permission.storage.status;
+    var status = await Permission.photos.status;
     if (status.isGranted) {
       pickFiles();
     } else {
@@ -35,7 +36,7 @@ class _HomeviewState extends State<Homeview> {
   }
 
   void requestStorageAccess() async {
-    var status = await Permission.storage.request();
+    var status = await Permission.photos.request();
     if (status.isGranted) {
       pickFiles();
     }
