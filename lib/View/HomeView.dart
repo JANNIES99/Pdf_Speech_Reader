@@ -12,6 +12,13 @@ class _HomeviewState extends State<Homeview> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text("Audio Reader"), backgroundColor: Colors.red),
+      body: Column(children: []),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        backgroundColor: Colors.red,
+        shape: CircleBorder(side: BorderSide(width: 15, color: Colors.red)),
+        child: Icon(Icons.add, color: Colors.black),
+      ),
     );
   }
 }
