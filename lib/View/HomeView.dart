@@ -1,4 +1,8 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class Homeview extends StatefulWidget {
   const Homeview({super.key});
@@ -8,6 +12,61 @@ class Homeview extends StatefulWidget {
 }
 
 class _HomeviewState extends State<Homeview> {
+  void pickFiles() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      allowedExtensions: ['jpg', 'png', 'pdf'],
+    );
+
+    if (result != null) {
+      File file = File(result.files.single.path!);
+      print(file.path);
+    } else {
+      // User canceled the picker
+    }
+  }
+
+  Future _fileAccess() async {
+    var status = await Permission.storage.status;
+    if (status.isGranted) {
+      pickFiles();
+    } else {
+      requestStorageAccess();
+    }
+  }
+
+  void requestStorageAccess() async {
+    var status = await Permission.storage.request();
+    if (status.isGranted) {
+      pickFiles();
+    }
+    if (status.isDenied) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          margin: EdgeInsets.all(10),
+          content: Text(
+            "Storage Access Denied",
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+    if (status.isPermanentlyDenied) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red,
+          margin: EdgeInsets.all(10),
+          content: Text(
+            "Storage Access Permanently Denied",
+            style: TextStyle(color: Colors.black),
+          ),
+          behavior: SnackBarBehavior.floating,
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,7 +80,9 @@ class _HomeviewState extends State<Homeview> {
         height: 70,
         width: 70,
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () {
+            _fileAccess();
+          },
           backgroundColor: const Color.fromARGB(255, 220, 0, 0),
           shape: CircleBorder(
             side: BorderSide(
