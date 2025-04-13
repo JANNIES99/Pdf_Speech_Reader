@@ -11,12 +11,21 @@ class _HomeviewState extends State<Homeview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("Audio Reader"), backgroundColor: Colors.red),
+      appBar: AppBar(
+        title: Text("Audio Reader"),
+        backgroundColor: const Color.fromARGB(255, 220, 0, 0),
+      ),
+      backgroundColor: const Color.fromARGB(255, 255, 248, 220),
       body: Column(children: []),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
-        backgroundColor: Colors.red,
-        shape: CircleBorder(side: BorderSide(width: 15, color: Colors.red)),
+        backgroundColor: const Color.fromARGB(255, 220, 0, 0),
+        shape: CircleBorder(
+          side: BorderSide(
+            width: 15,
+            color: const Color.fromARGB(255, 220, 0, 0),
+          ),
+        ),
         child: Icon(Icons.add, color: Colors.black),
       ),
     );
