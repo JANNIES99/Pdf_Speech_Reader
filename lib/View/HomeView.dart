@@ -1,8 +1,11 @@
 import 'dart:io';
-
+import 'dart:ui';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:pdf_render/pdf_render.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:image/image.dart' as imglib;
 
 class Homeview extends StatefulWidget {
   const Homeview({super.key});
@@ -24,6 +27,34 @@ class _HomeviewState extends State<Homeview> {
     } else {
       // User canceled the picker
     }
+  }
+
+  Future<List<File>> pdfToImages(File pdfFile) async {
+    final PdfDocument document = await PdfDocument.openFile(pdfFile.path);
+    final int pageCount = document.pageCount;
+    final List<File> imageFiles = <File>[];
+    for (int pageIndex = 1; pageIndex <= pageCount; pageIndex++) {
+      final PdfPage page = await document.getPage(pageIndex);
+      final PdfPageImage imgPdf = await page.render();
+      var img = await imgPdf.createImageDetached();
+      final imgBytes = await img.toByteData(format: ImageByteFormat.png);
+      if (imgBytes != null) {
+        final libImage = imglib.decodeImage(
+          imgBytes.buffer.asUint8List(
+            imgBytes.offsetInBytes,
+            imgBytes.lengthInBytes,
+          ),
+        );
+        if (libImage != null) {
+          final imgData = libImage.getBytes();
+          final tempDir = await getTemporaryDirectory();
+          final imageFile = File('${tempDir.path}/page_$pageIndex.png');
+          await imageFile.writeAsBytes(imgData);
+          imageFiles.add(imageFile);
+        }
+      }
+    }
+    return imageFiles;
   }
 
   Future _fileAccess() async {
