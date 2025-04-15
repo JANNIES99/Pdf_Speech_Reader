@@ -3,7 +3,6 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:pdf_image_renderer/pdf_image_renderer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image/image.dart' as imglib;
@@ -37,7 +36,7 @@ class _HomeviewState extends State<Homeview> {
 
   Future<List<String>> pdfToText(File pdfFile) async {
     final document = PdfImageRenderer(path: pdfFile.path);
-    final List<File> imageFiles = <File>[];
+    final List<Uint8List> imageByteList = [];
     List<String> listOfText = [];
     await document.open();
     final int pageCount = await document.getPageCount();
@@ -57,24 +56,12 @@ class _HomeviewState extends State<Homeview> {
       );
       await document.closePage(pageIndex: pageIndex);
       if (imgBytes != null) {
-        final libImage = imglib.decodeImage(
-          imgBytes.buffer.asUint8List(
-            imgBytes.offsetInBytes,
-            imgBytes.lengthInBytes,
-          ),
-        );
-        if (libImage != null) {
-          final imgData = libImage.getBytes();
-          final tempDir = await getTemporaryDirectory();
-          final imageFile = File('${tempDir.path}/page_$pageIndex.png');
-          await imageFile.writeAsBytes(imgData);
-          imageFiles.add(imageFile);
-        }
+        imageByteList.add(imgBytes);
       }
     }
     await document.close();
-    if (imageFiles.isNotEmpty) {
-      listOfText = await recognizeTextFromImages(imageFiles);
+    if (imageByteList.isNotEmpty) {
+      listOfText = await recognizeTextFromImages(imageByteList);
     }
     return listOfText;
   }
@@ -95,10 +82,9 @@ class _HomeviewState extends State<Homeview> {
             decodedImage.width.toDouble(),
             decodedImage.height.toDouble(),
           ),
-          rotation:
-              InputImageRotation.rotation0deg, // Adjust rotation if needed
-          format: InputImageFormat.bgra8888, // Adjust format if needed
-          bytesPerRow: decodedImage.width * 4, // Adjust bytesPerRow if needed
+          rotation: InputImageRotation.rotation0deg,
+          format: InputImageFormat.bgra8888,
+          bytesPerRow: decodedImage.width * 4,
         ),
       );
       final recognizedText = await textRecognizer.processImage(inputImage);
