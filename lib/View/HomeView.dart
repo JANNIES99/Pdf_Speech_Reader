@@ -139,15 +139,17 @@ class _HomeviewState extends State<Homeview> {
         backgroundColor: const Color.fromARGB(255, 220, 0, 0),
       ),
       backgroundColor: const Color.fromARGB(255, 255, 248, 220),
-      body: Column(
-        children: [
-          if (listOfText.isEmpty)
-            Text("Enter a File")
-          else
-            ...listOfText.map((text) {
-              return Text(text);
-            }),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            if (listOfText.isEmpty)
+              Text("Enter a File")
+            else
+              ...listOfText.map((text) {
+                return Text(text);
+              }),
+          ],
+        ),
       ),
       floatingActionButton: SizedBox(
         height: 70,
