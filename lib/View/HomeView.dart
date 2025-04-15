@@ -1,8 +1,8 @@
 import 'dart:io';
-import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf_image_renderer/pdf_image_renderer.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image/image.dart' as imglib;
@@ -36,7 +36,7 @@ class _HomeviewState extends State<Homeview> {
 
   Future<List<String>> pdfToText(File pdfFile) async {
     final document = PdfImageRenderer(path: pdfFile.path);
-    final List<Uint8List> imageByteList = [];
+    final List<File> imageFiles = <File>[];
     List<String> listOfText = [];
     await document.open();
     final int pageCount = await document.getPageCount();
@@ -56,40 +56,34 @@ class _HomeviewState extends State<Homeview> {
       );
       await document.closePage(pageIndex: pageIndex);
       if (imgBytes != null) {
-        imageByteList.add(imgBytes);
+        final decodedImage = imglib.decodeImage(imgBytes);
+        final imageData = imglib.encodePng(decodedImage!);
+        final tempDir = await getTemporaryDirectory();
+        final imageFile = File('${tempDir.path}/page_$pageIndex.png');
+        await imageFile.writeAsBytes(imageData);
+        imageFiles.add(imageFile);
       }
     }
     await document.close();
-    if (imageByteList.isNotEmpty) {
-      listOfText = await recognizeTextFromImages(imageByteList);
+    if (imageFiles.isNotEmpty) {
+      listOfText = await recognizeTextFromImages(imageFiles);
     }
     return listOfText;
   }
 
-  Future<List<String>> recognizeTextFromImages(
-    List<Uint8List> imageFiles,
-  ) async {
+  Future<List<String>> recognizeTextFromImages(List<File> imageFiles) async {
     final textRecognizer = TextRecognizer(script: TextRecognitionScript.latin);
     final fileListSize = imageFiles.length;
     final List<String> listOfText = [];
     for (int index = 0; index < fileListSize; index++) {
-      final decodedImage = imglib.decodeImage(imageFiles[index]);
-      final imageBytes = imglib.encodePng(decodedImage!);
-      final inputImage = InputImage.fromBytes(
-        bytes: Uint8List.fromList(imageBytes),
-        metadata: InputImageMetadata(
-          size: Size(
-            decodedImage.width.toDouble(),
-            decodedImage.height.toDouble(),
-          ),
-          rotation: InputImageRotation.rotation0deg,
-          format: InputImageFormat.bgra8888,
-          bytesPerRow: decodedImage.width * 4,
-        ),
-      );
-      final recognizedText = await textRecognizer.processImage(inputImage);
-      final String text = recognizedText.text;
-      listOfText.add(text);
+      final inputImage = InputImage.fromFile(imageFiles[index]);
+      try {
+        final recognizedText = await textRecognizer.processImage(inputImage);
+        final String text = recognizedText.text;
+        listOfText.add(text);
+      } on Exception catch (e) {
+        print(e);
+      }
     }
     print(listOfText);
     return listOfText;
