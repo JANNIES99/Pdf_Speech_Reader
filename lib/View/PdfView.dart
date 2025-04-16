@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_tts/flutter_tts.dart';
-import 'package:pdfaudioreader/consts.dart';
 
 class Pdfview extends StatefulWidget {
-  const Pdfview({super.key});
+  const Pdfview({required this.listOfText, super.key});
+  final List<String> listOfText;
 
   @override
   State<Pdfview> createState() => _PdfviewState();
 }
 
 class _PdfviewState extends State<Pdfview> {
+  late String ttsInput;
   FlutterTts flutterTts = FlutterTts();
   int? currentWordStart;
   int? currentWordEnd;
@@ -22,6 +23,7 @@ class _PdfviewState extends State<Pdfview> {
   }
 
   void initTTS() {
+    ttsInput = widget.listOfText[0];
     flutterTts.setProgressHandler((text, start, end, word) {
       setState(() {
         currentWordStart = start;
@@ -60,7 +62,7 @@ class _PdfviewState extends State<Pdfview> {
               text: TextSpan(
                 style: TextStyle(fontSize: 20, color: Colors.black),
                 children: <TextSpan>[
-                  TextSpan(text: TTS_Input.substring(0, currentWordStart)),
+                  TextSpan(text: ttsInput.substring(0, currentWordStart)),
                   if (currentWordStart != null)
                     TextSpan(
                       style: TextStyle(
@@ -68,13 +70,13 @@ class _PdfviewState extends State<Pdfview> {
                         color: Colors.white,
                         backgroundColor: Colors.deepPurple,
                       ),
-                      text: TTS_Input.substring(
+                      text: ttsInput.substring(
                         currentWordStart!,
                         currentWordEnd,
                       ),
                     ),
                   if (currentWordEnd != null)
-                    TextSpan(text: TTS_Input.substring(currentWordEnd!)),
+                    TextSpan(text: ttsInput.substring(currentWordEnd!)),
                 ],
               ),
             ),
@@ -83,7 +85,7 @@ class _PdfviewState extends State<Pdfview> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          flutterTts.speak(TTS_Input);
+          flutterTts.speak(ttsInput);
         },
         child: Icon(Icons.speaker),
       ),
