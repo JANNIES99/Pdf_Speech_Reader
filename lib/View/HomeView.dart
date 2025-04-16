@@ -82,7 +82,20 @@ class _HomeviewState extends State<Homeview> {
         final String text = recognizedText.text;
         listOfText.add(text);
       } on Exception catch (e) {
-        print(e);
+        final int length = e.toString().length;
+        String exceptionText = e.toString();
+        if (length > 30) {
+          exceptionText = exceptionText.substring(0, 30);
+        }
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            margin: EdgeInsets.all(10),
+            content: Text(exceptionText, style: TextStyle(color: Colors.black)),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
     }
     print(listOfText);
@@ -104,6 +117,7 @@ class _HomeviewState extends State<Homeview> {
       pickFiles();
     }
     if (status.isDenied) {
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red,
@@ -117,6 +131,7 @@ class _HomeviewState extends State<Homeview> {
       );
     }
     if (status.isPermanentlyDenied) {
+      ScaffoldMessenger.of(context).clearSnackBars();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           backgroundColor: Colors.red,
