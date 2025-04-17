@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_mlkit_text_recognition/google_mlkit_text_recognition.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf_image_renderer/pdf_image_renderer.dart';
+import 'package:pdfaudioreader/View/PdfView.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:image/image.dart' as imglib;
 
@@ -27,6 +28,13 @@ class _HomeviewState extends State<Homeview> {
       final sampleList = await pdfToText(file);
       setState(() {
         listOfText = sampleList;
+        if (listOfText.isNotEmpty) {
+          Navigator.of(context).push(
+            MaterialPageRoute(
+              builder: (context) => Pdfview(listOfText: listOfText),
+            ),
+          );
+        }
       });
       print(file.path);
     } else {

@@ -53,34 +53,36 @@ class _PdfviewState extends State<Pdfview> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            speakerSelector(),
-            RichText(
-              text: TextSpan(
-                style: TextStyle(fontSize: 20, color: Colors.black),
-                children: <TextSpan>[
-                  TextSpan(text: ttsInput.substring(0, currentWordStart)),
-                  if (currentWordStart != null)
-                    TextSpan(
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                        backgroundColor: Colors.deepPurple,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              speakerSelector(),
+              RichText(
+                text: TextSpan(
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                  children: <TextSpan>[
+                    TextSpan(text: ttsInput.substring(0, currentWordStart)),
+                    if (currentWordStart != null)
+                      TextSpan(
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          backgroundColor: Colors.deepPurple,
+                        ),
+                        text: ttsInput.substring(
+                          currentWordStart!,
+                          currentWordEnd,
+                        ),
                       ),
-                      text: ttsInput.substring(
-                        currentWordStart!,
-                        currentWordEnd,
-                      ),
-                    ),
-                  if (currentWordEnd != null)
-                    TextSpan(text: ttsInput.substring(currentWordEnd!)),
-                ],
+                    if (currentWordEnd != null)
+                      TextSpan(text: ttsInput.substring(currentWordEnd!)),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton(
