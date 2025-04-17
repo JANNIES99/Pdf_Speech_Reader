@@ -52,37 +52,37 @@ class _PdfviewState extends State<Pdfview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              speakerSelector(),
-              RichText(
-                text: TextSpan(
-                  style: TextStyle(fontSize: 20, color: Colors.black),
-                  children: <TextSpan>[
-                    TextSpan(text: ttsInput.substring(0, currentWordStart)),
-                    if (currentWordStart != null)
-                      TextSpan(
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          backgroundColor: Colors.deepPurple,
-                        ),
-                        text: ttsInput.substring(
-                          currentWordStart!,
-                          currentWordEnd,
-                        ),
+      appBar: AppBar(title: Text("PDF TTS View")),
+      backgroundColor: Colors.black,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            speakerSelector(),
+            RichText(
+              text: TextSpan(
+                style: TextStyle(fontSize: 20, color: Colors.white),
+                children: <TextSpan>[
+                  TextSpan(text: ttsInput.substring(0, currentWordStart)),
+                  if (currentWordStart != null)
+                    TextSpan(
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.black,
+                        backgroundColor: Colors.purpleAccent,
                       ),
-                    if (currentWordEnd != null)
-                      TextSpan(text: ttsInput.substring(currentWordEnd!)),
-                  ],
-                ),
+                      text: ttsInput.substring(
+                        currentWordStart!,
+                        currentWordEnd,
+                      ),
+                    ),
+                  if (currentWordEnd != null)
+                    TextSpan(text: ttsInput.substring(currentWordEnd!)),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
@@ -96,12 +96,18 @@ class _PdfviewState extends State<Pdfview> {
 
   Widget speakerSelector() {
     return DropdownButton(
+      dropdownColor: Colors.black,
       value: currentVoice,
       items:
           voices
               .map(
-                (voice) =>
-                    DropdownMenuItem(value: voice, child: Text(voice["name"])),
+                (voice) => DropdownMenuItem(
+                  value: voice,
+                  child: Text(
+                    voice["name"],
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
               )
               .toList(),
       onChanged: (voice) {
