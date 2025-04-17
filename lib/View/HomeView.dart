@@ -16,6 +16,7 @@ class Homeview extends StatefulWidget {
 }
 
 class _HomeviewState extends State<Homeview> {
+  bool isLoading = false;
   List<String> listOfText = [];
   void pickFiles() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -25,9 +26,13 @@ class _HomeviewState extends State<Homeview> {
 
     if (result != null) {
       File file = File(result.files.single.path!);
+      setState(() {
+        isLoading = true;
+      });
       final sampleList = await pdfToText(file);
       setState(() {
         listOfText = sampleList;
+        isLoading = false;
         if (listOfText.isNotEmpty) {
           Navigator.of(context).push(
             MaterialPageRoute(
@@ -163,16 +168,12 @@ class _HomeviewState extends State<Homeview> {
       ),
       backgroundColor: const Color.fromARGB(255, 255, 248, 220),
       body: SingleChildScrollView(
-        child: Column(
-          children: [
-            if (listOfText.isEmpty)
-              Text("Enter a File")
-            else
-              ...listOfText.map((text) {
-                return Text(text);
-              }),
-          ],
-        ),
+        child:
+            isLoading
+                ? Center(child: CircularProgressIndicator())
+                : listOfText.isEmpty
+                ? Center(child: Text("Enter a File"))
+                : Column(children: [...listOfText.map((text) => Text(text))]),
       ),
       floatingActionButton: SizedBox(
         height: 70,
