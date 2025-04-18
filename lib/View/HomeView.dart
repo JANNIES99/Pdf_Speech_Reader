@@ -29,18 +29,39 @@ class _HomeviewState extends State<Homeview> {
       setState(() {
         isLoading = true;
       });
-      final sampleList = await pdfToText(file);
-      setState(() {
-        listOfText = sampleList;
-        isLoading = false;
-        if (listOfText.isNotEmpty) {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (context) => Pdfview(listOfText: listOfText),
-            ),
-          );
+      try {
+        final sampleList = await pdfToText(file);
+        setState(() {
+          listOfText = sampleList;
+          isLoading = false;
+          if (listOfText.isNotEmpty) {
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => Pdfview(listOfText: listOfText),
+              ),
+            );
+          }
+        });
+      } on Exception catch (e) {
+        final int length = e.toString().length;
+        String exceptionText = e.toString();
+        if (length > 30) {
+          exceptionText = exceptionText.substring(0, 30);
         }
-      });
+        setState(() {
+          isLoading = false;
+        });
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: Duration(seconds: 3),
+            backgroundColor: Colors.red,
+            margin: EdgeInsets.all(10),
+            content: Text(exceptionText, style: TextStyle(color: Colors.black)),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
+      }
       print(file.path);
     } else {
       // User canceled the picker
