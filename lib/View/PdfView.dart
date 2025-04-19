@@ -18,6 +18,9 @@ class _PdfviewState extends State<Pdfview> {
   int? currentWordEnd;
   List<Map> voices = [];
   Map? currentVoice;
+  final playIcon = Icon(Icons.play_arrow_rounded, color: Colors.black);
+  final pauseIcon = Icon(Icons.pause_outlined, color: Colors.black);
+  Icon currentIcon = Icon(Icons.play_arrow_rounded, color: Colors.black);
   @override
   void initState() {
     super.initState();
@@ -56,38 +59,65 @@ class _PdfviewState extends State<Pdfview> {
     return Scaffold(
       appBar: AppBar(title: Text("PDF TTS View")),
       backgroundColor: Colors.black,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(10),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              RichText(
-                text: TextSpan(
-                  style: TextStyle(fontSize: 20, color: Colors.white),
-                  children: <TextSpan>[
-                    TextSpan(text: ttsInput.substring(0, currentWordStart)),
-                    if (currentWordStart != null)
-                      TextSpan(
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.black,
-                          backgroundColor: Colors.purpleAccent,
-                        ),
-                        text: ttsInput.substring(
-                          currentWordStart!,
-                          currentWordEnd,
-                        ),
+      body: Column(
+        children: [
+          Expanded(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: EdgeInsets.all(10),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    RichText(
+                      text: TextSpan(
+                        style: TextStyle(fontSize: 20, color: Colors.white),
+                        children: <TextSpan>[
+                          TextSpan(
+                            text: ttsInput.substring(0, currentWordStart),
+                          ),
+                          if (currentWordStart != null)
+                            TextSpan(
+                              style: TextStyle(
+                                fontSize: 20,
+                                color: Colors.black,
+                                backgroundColor: Colors.purpleAccent,
+                              ),
+                              text: ttsInput.substring(
+                                currentWordStart!,
+                                currentWordEnd,
+                              ),
+                            ),
+                          if (currentWordEnd != null)
+                            TextSpan(text: ttsInput.substring(currentWordEnd!)),
+                        ],
                       ),
-                    if (currentWordEnd != null)
-                      TextSpan(text: ttsInput.substring(currentWordEnd!)),
+                    ),
                   ],
                 ),
               ),
-            ],
+            ),
           ),
-        ),
+          Container(
+            color: Colors.red,
+            child: Column(
+              children: [
+                speakerSelector(),
+                Row(
+                  children: [
+                    Container(
+                      decoration: ShapeDecoration(
+                        shape: CircleBorder(),
+                        color: Colors.white,
+                      ),
+                      child: Icon(Icons.play_arrow),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
