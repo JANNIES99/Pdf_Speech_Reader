@@ -111,26 +111,9 @@ class _HomeviewState extends State<Homeview> {
     final List<String> listOfText = [];
     for (int index = 0; index < fileListSize; index++) {
       final inputImage = InputImage.fromFile(imageFiles[index]);
-      try {
-        final recognizedText = await textRecognizer.processImage(inputImage);
-        final String text = recognizedText.text;
-        listOfText.add(text);
-      } on Exception catch (e) {
-        final int length = e.toString().length;
-        String exceptionText = e.toString();
-        if (length > 30) {
-          exceptionText = exceptionText.substring(0, 30);
-        }
-        ScaffoldMessenger.of(context).clearSnackBars();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            backgroundColor: Colors.red,
-            margin: EdgeInsets.all(10),
-            content: Text(exceptionText, style: TextStyle(color: Colors.black)),
-            behavior: SnackBarBehavior.floating,
-          ),
-        );
-      }
+      final recognizedText = await textRecognizer.processImage(inputImage);
+      final String text = recognizedText.text;
+      listOfText.add(text);
     }
     print(listOfText);
     return listOfText;
