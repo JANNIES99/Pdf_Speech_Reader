@@ -12,6 +12,8 @@ class Pdfview extends StatefulWidget {
 class _PdfviewState extends State<Pdfview> {
   late String ttsInput;
   FlutterTts flutterTts = FlutterTts();
+  bool play = false;
+  bool pause = true;
   int? currentWordStart;
   int? currentWordEnd;
   List<Map> voices = [];
@@ -55,41 +57,37 @@ class _PdfviewState extends State<Pdfview> {
       appBar: AppBar(title: Text("PDF TTS View")),
       backgroundColor: Colors.black,
       body: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            speakerSelector(),
-            RichText(
-              text: TextSpan(
-                style: TextStyle(fontSize: 20, color: Colors.white),
-                children: <TextSpan>[
-                  TextSpan(text: ttsInput.substring(0, currentWordStart)),
-                  if (currentWordStart != null)
-                    TextSpan(
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.black,
-                        backgroundColor: Colors.purpleAccent,
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              RichText(
+                text: TextSpan(
+                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  children: <TextSpan>[
+                    TextSpan(text: ttsInput.substring(0, currentWordStart)),
+                    if (currentWordStart != null)
+                      TextSpan(
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.black,
+                          backgroundColor: Colors.purpleAccent,
+                        ),
+                        text: ttsInput.substring(
+                          currentWordStart!,
+                          currentWordEnd,
+                        ),
                       ),
-                      text: ttsInput.substring(
-                        currentWordStart!,
-                        currentWordEnd,
-                      ),
-                    ),
-                  if (currentWordEnd != null)
-                    TextSpan(text: ttsInput.substring(currentWordEnd!)),
-                ],
+                    if (currentWordEnd != null)
+                      TextSpan(text: ttsInput.substring(currentWordEnd!)),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          flutterTts.speak(ttsInput);
-        },
-        child: Icon(Icons.speaker),
       ),
     );
   }
