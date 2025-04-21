@@ -121,6 +121,9 @@ class _PdfviewState extends State<Pdfview> {
                           } else if (!play && pause) {
                             pause = !pause;
                             play = !play;
+                            setState(() {
+                              currentIcon = playIcon;
+                            });
                           }
                         },
                         icon: currentIcon,
