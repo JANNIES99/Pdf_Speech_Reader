@@ -113,12 +113,14 @@ class _PdfviewState extends State<Pdfview> {
                       child: IconButton(
                         onPressed: () {
                           if (play && !pause) {
+                            flutterTts.speak(ttsInput);
                             pause = !pause;
                             play = !play;
                             setState(() {
                               currentIcon = pauseIcon;
                             });
                           } else if (!play && pause) {
+                            flutterTts.pause();
                             pause = !pause;
                             play = !play;
                             setState(() {
