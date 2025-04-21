@@ -20,9 +20,17 @@ class _PdfviewState extends State<Pdfview> {
   int? currentWordEnd;
   List<Map> voices = [];
   Map? currentVoice;
-  final playIcon = Icon(Icons.play_arrow_rounded, color: Colors.black);
-  final pauseIcon = Icon(Icons.pause_outlined, color: Colors.black);
-  Icon currentIcon = Icon(Icons.play_arrow_rounded, color: Colors.black);
+  final playIcon = Icon(
+    Icons.play_arrow_rounded,
+    size: 20,
+    color: Colors.black,
+  );
+  final pauseIcon = Icon(Icons.pause_outlined, size: 20, color: Colors.black);
+  Icon currentIcon = Icon(
+    Icons.play_arrow_rounded,
+    size: 20,
+    color: Colors.black,
+  );
   @override
   void initState() {
     super.initState();
@@ -114,7 +122,6 @@ class _PdfviewState extends State<Pdfview> {
               children: [
                 speakerSelector(),
                 Container(
-                  padding: EdgeInsets.all(5),
                   decoration: ShapeDecoration(
                     shape: CircleBorder(),
                     color: Colors.white,
