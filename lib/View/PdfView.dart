@@ -14,6 +14,8 @@ class _PdfviewState extends State<Pdfview> {
   FlutterTts flutterTts = FlutterTts();
   bool play = false;
   bool pause = true;
+  int previousWordStart = 0;
+  int previousWordEnd = 0;
   int? currentWordStart;
   int? currentWordEnd;
   List<Map> voices = [];
@@ -27,12 +29,18 @@ class _PdfviewState extends State<Pdfview> {
     initTTS();
   }
 
+  @override
+  void dispose() {
+    flutterTts.stop();
+    super.dispose();
+  }
+
   void initTTS() {
     ttsInput = widget.listOfText[0];
     flutterTts.setProgressHandler((text, start, end, word) {
       setState(() {
-        currentWordStart = start;
-        currentWordEnd = end;
+        currentWordStart = previousWordStart + start;
+        currentWordEnd = previousWordStart + end;
       });
     });
     flutterTts.getVoices.then((data) {
@@ -99,39 +107,40 @@ class _PdfviewState extends State<Pdfview> {
             ),
           ),
           Container(
+            padding: EdgeInsets.all(15),
+            width: double.infinity,
             color: Colors.red,
             child: Column(
               children: [
                 speakerSelector(),
-                Row(
-                  children: [
-                    Container(
-                      decoration: ShapeDecoration(
-                        shape: CircleBorder(),
-                        color: Colors.white,
-                      ),
-                      child: IconButton(
-                        onPressed: () {
-                          if (play && !pause) {
-                            flutterTts.speak(ttsInput);
-                            pause = !pause;
-                            play = !play;
-                            setState(() {
-                              currentIcon = pauseIcon;
-                            });
-                          } else if (!play && pause) {
-                            flutterTts.pause();
-                            pause = !pause;
-                            play = !play;
-                            setState(() {
-                              currentIcon = playIcon;
-                            });
-                          }
-                        },
-                        icon: currentIcon,
-                      ),
-                    ),
-                  ],
+                Container(
+                  padding: EdgeInsets.all(5),
+                  decoration: ShapeDecoration(
+                    shape: CircleBorder(),
+                    color: Colors.white,
+                  ),
+                  child: IconButton(
+                    onPressed: () {
+                      if (play && !pause) {
+                        previousWordStart = currentWordStart ?? 0;
+                        previousWordEnd = currentWordEnd ?? 0;
+                        flutterTts.speak(ttsInput);
+                        pause = !pause;
+                        play = !play;
+                        setState(() {
+                          currentIcon = pauseIcon;
+                        });
+                      } else if (!play && pause) {
+                        flutterTts.pause();
+                        pause = !pause;
+                        play = !play;
+                        setState(() {
+                          currentIcon = playIcon;
+                        });
+                      }
+                    },
+                    icon: currentIcon,
+                  ),
                 ),
               ],
             ),
