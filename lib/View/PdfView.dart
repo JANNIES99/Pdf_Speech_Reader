@@ -20,15 +20,11 @@ class _PdfviewState extends State<Pdfview> {
   int? currentWordEnd;
   List<Map> voices = [];
   Map? currentVoice;
-  final playIcon = Icon(
-    Icons.play_arrow_rounded,
-    size: 20,
-    color: Colors.black,
-  );
-  final pauseIcon = Icon(Icons.pause_outlined, size: 20, color: Colors.black);
+  Icon playIcon = Icon(Icons.play_arrow_rounded, size: 40, color: Colors.black);
+  Icon pauseIcon = Icon(Icons.pause_outlined, size: 40, color: Colors.black);
   Icon currentIcon = Icon(
     Icons.play_arrow_rounded,
-    size: 20,
+    size: 40,
     color: Colors.black,
   );
   @override
@@ -121,32 +117,33 @@ class _PdfviewState extends State<Pdfview> {
             child: Column(
               children: [
                 speakerSelector(),
-                Container(
-                  decoration: ShapeDecoration(
-                    shape: CircleBorder(),
-                    color: Colors.white,
-                  ),
-                  child: IconButton(
-                    onPressed: () {
-                      if (play && !pause) {
-                        previousWordStart = currentWordStart ?? 0;
-                        previousWordEnd = currentWordEnd ?? 0;
-                        flutterTts.speak(ttsInput);
-                        pause = !pause;
-                        play = !play;
-                        setState(() {
-                          currentIcon = pauseIcon;
-                        });
-                      } else if (!play && pause) {
-                        flutterTts.pause();
-                        pause = !pause;
-                        play = !play;
-                        setState(() {
-                          currentIcon = playIcon;
-                        });
-                      }
-                    },
-                    icon: currentIcon,
+                GestureDetector(
+                  onTap: () {
+                    if (play && !pause) {
+                      previousWordStart = currentWordStart ?? 0;
+                      previousWordEnd = currentWordEnd ?? 0;
+                      flutterTts.pause();
+                      pause = !pause;
+                      play = !play;
+                      setState(() {
+                        currentIcon = playIcon;
+                      });
+                    } else if (!play && pause) {
+                      flutterTts.speak(ttsInput);
+                      pause = !pause;
+                      play = !play;
+                      setState(() {
+                        currentIcon = pauseIcon;
+                      });
+                    }
+                  },
+                  child: Container(
+                    padding: EdgeInsets.all(10),
+                    decoration: ShapeDecoration(
+                      shape: CircleBorder(),
+                      color: Colors.white,
+                    ),
+                    child: currentIcon,
                   ),
                 ),
               ],
