@@ -110,7 +110,21 @@ class _PdfviewState extends State<Pdfview> {
                         shape: CircleBorder(),
                         color: Colors.white,
                       ),
-                      child: Icon(Icons.play_arrow),
+                      child: IconButton(
+                        onPressed: () {
+                          if (play && !pause) {
+                            pause = !pause;
+                            play = !play;
+                            setState(() {
+                              currentIcon = pauseIcon;
+                            });
+                          } else if (!play && pause) {
+                            pause = !pause;
+                            play = !play;
+                          }
+                        },
+                        icon: currentIcon,
+                      ),
                     ),
                   ],
                 ),
