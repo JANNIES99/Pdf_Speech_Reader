@@ -14,6 +14,8 @@ class _PdfviewState extends State<Pdfview> {
   FlutterTts flutterTts = FlutterTts();
   bool play = false;
   bool pause = true;
+  double pitch = 1.0;
+  double speechRate = 1.0;
   int previousWordStart = 0;
   int previousWordEnd = 0;
   int? currentWordStart;
@@ -145,6 +147,32 @@ class _PdfviewState extends State<Pdfview> {
                     ),
                     child: currentIcon,
                   ),
+                ),
+                Slider(
+                  value: pitch,
+                  onChanged: (newRating) {
+                    setState(() {
+                      pitch = newRating;
+                      flutterTts.setPitch(pitch);
+                    });
+                  },
+                  min: 0.5,
+                  max: 2.0,
+                  divisions: 6,
+                  label: "Pitch:$pitch",
+                ),
+                Slider(
+                  value: speechRate,
+                  onChanged: (newRating) {
+                    setState(() {
+                      speechRate = newRating;
+                      flutterTts.setSpeechRate(speechRate);
+                    });
+                  },
+                  min: 0.0,
+                  max: 2.0,
+                  divisions: 8,
+                  label: "Speech Rate:$speechRate",
                 ),
               ],
             ),
