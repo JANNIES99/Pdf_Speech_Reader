@@ -22,8 +22,16 @@ class _PdfviewState extends State<Pdfview> {
   int? currentWordEnd;
   List<Map> voices = [];
   Map? currentVoice;
-  Icon playIcon = Icon(Icons.play_arrow_rounded, size: 40, color: Colors.black);
-  Icon pauseIcon = Icon(Icons.pause_outlined, size: 40, color: Colors.black);
+  final Icon playIcon = Icon(
+    Icons.play_arrow_rounded,
+    size: 40,
+    color: Colors.black,
+  );
+  final Icon pauseIcon = Icon(
+    Icons.pause_outlined,
+    size: 40,
+    color: Colors.black,
+  );
   Icon currentIcon = Icon(
     Icons.play_arrow_rounded,
     size: 40,
