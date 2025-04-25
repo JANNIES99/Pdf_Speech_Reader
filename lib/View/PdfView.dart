@@ -72,8 +72,11 @@ class _PdfviewState extends State<Pdfview> {
     });
   }
 
-  void setVoice(Map voice) {
-    flutterTts.setVoice({"name": voice["name"], "locale": voice["locale"]});
+  void setVoice(Map voice) async {
+    await flutterTts.setVoice({
+      "name": voice["name"],
+      "locale": voice["locale"],
+    });
   }
 
   @override
