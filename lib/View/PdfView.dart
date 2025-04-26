@@ -109,6 +109,7 @@ class _PdfviewState extends State<Pdfview> {
       "name": voice["name"],
       "locale": voice["locale"],
     });
+    await startManager();
   }
 
   @override
