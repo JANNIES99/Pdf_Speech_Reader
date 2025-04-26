@@ -72,27 +72,39 @@ class _PdfviewState extends State<Pdfview> {
     });
   }
 
-  void startTTS() async {
-    pause = !pause;
-    play = !play;
-    await flutterTts.speak(ttsInput);
-    setState(() {
-      currentIcon = pauseIcon;
-    });
+  Future<void> startManager() async {
+    if (!play && pause) {
+      pause = !pause;
+      play = !play;
+      await flutterTts.speak(ttsInput);
+      setState(() {
+        currentIcon = pauseIcon;
+      });
+    }
   }
 
-  void pauseTTS() async {
-    previousWordStart = currentWordStart ?? 0;
-    previousWordEnd = currentWordEnd ?? 0;
-    pause = !pause;
-    play = !play;
-    await flutterTts.pause();
-    setState(() {
-      currentIcon = playIcon;
-    });
+  Future<void> pauseManager() async {
+    if (play && !pause) {
+      previousWordStart = currentWordStart ?? 0;
+      previousWordEnd = currentWordEnd ?? 0;
+      pause = !pause;
+      play = !play;
+      await flutterTts.pause();
+      setState(() {
+        currentIcon = playIcon;
+      });
+    }
   }
 
   void setVoice(Map voice) async {
+    await flutterTts.setVoice({
+      "name": voice["name"],
+      "locale": voice["locale"],
+    });
+  }
+
+  void voiceManager(Map voice) async {
+    await pauseManager();
     await flutterTts.setVoice({
       "name": voice["name"],
       "locale": voice["locale"],
@@ -153,21 +165,9 @@ class _PdfviewState extends State<Pdfview> {
                 GestureDetector(
                   onTap: () {
                     if (play && !pause) {
-                      previousWordStart = currentWordStart ?? 0;
-                      previousWordEnd = currentWordEnd ?? 0;
-                      flutterTts.pause();
-                      pause = !pause;
-                      play = !play;
-                      setState(() {
-                        currentIcon = playIcon;
-                      });
+                      pauseManager();
                     } else if (!play && pause) {
-                      flutterTts.speak(ttsInput);
-                      pause = !pause;
-                      play = !play;
-                      setState(() {
-                        currentIcon = pauseIcon;
-                      });
+                      startManager();
                     }
                   },
                   child: Container(
