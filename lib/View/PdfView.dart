@@ -73,13 +73,23 @@ class _PdfviewState extends State<Pdfview> {
   }
 
   void startTTS() async {
+    pause = !pause;
+    play = !play;
     await flutterTts.speak(ttsInput);
+    setState(() {
+      currentIcon = pauseIcon;
+    });
   }
 
   void pauseTTS() async {
     previousWordStart = currentWordStart ?? 0;
     previousWordEnd = currentWordEnd ?? 0;
+    pause = !pause;
+    play = !play;
     await flutterTts.pause();
+    setState(() {
+      currentIcon = playIcon;
+    });
   }
 
   void setVoice(Map voice) async {
