@@ -104,12 +104,16 @@ class _PdfviewState extends State<Pdfview> {
   }
 
   void voiceManager(Map voice) async {
+    final bool tempPause = pause;
+    final bool tempPlay = play;
     await pauseManager();
     await flutterTts.setVoice({
       "name": voice["name"],
       "locale": voice["locale"],
     });
-    await startManager();
+    if (tempPlay && !tempPause) {
+      await startManager();
+    }
   }
 
   @override
@@ -233,7 +237,7 @@ class _PdfviewState extends State<Pdfview> {
       onChanged: (voice) {
         setState(() {
           currentVoice = voice;
-          setVoice(currentVoice!);
+          voiceManager(currentVoice!);
         });
       },
     );
