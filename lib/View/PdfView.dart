@@ -77,8 +77,12 @@ class _PdfviewState extends State<Pdfview> {
     if (!play && pause) {
       pause = !pause;
       play = !play;
-      await flutterTts.speak(ttsInput);
       setState(() {
+        playButtonIsDisabled = true;
+      });
+      await flutterTts.speak(ttsInput.substring(previousWordStart));
+      setState(() {
+        playButtonIsDisabled = false;
         currentIcon = pauseIcon;
       });
     }
@@ -86,14 +90,14 @@ class _PdfviewState extends State<Pdfview> {
 
   Future<void> pauseManager() async {
     if (play && !pause) {
-      previousWordStart = currentWordStart ?? 0;
-      previousWordEnd = currentWordEnd ?? 0;
       pause = !pause;
       play = !play;
       await flutterTts.pause();
       setState(() {
         currentIcon = playIcon;
       });
+      previousWordStart = currentWordStart ?? 0;
+      previousWordEnd = currentWordEnd ?? 0;
     }
   }
 
@@ -118,6 +122,9 @@ class _PdfviewState extends State<Pdfview> {
     if (tempPlay && !tempPause) {
       await startManager();
     }
+    setState(() {
+      playButtonIsDisabled = false;
+    });
   }
 
   @override
