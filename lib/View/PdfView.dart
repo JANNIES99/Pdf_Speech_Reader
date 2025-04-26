@@ -14,6 +14,7 @@ class _PdfviewState extends State<Pdfview> {
   FlutterTts flutterTts = FlutterTts();
   bool play = false;
   bool pause = true;
+  bool playButtonIsDisabled = false;
   double pitch = 1.0;
   double speechRate = 1.0;
   int previousWordStart = 0;
@@ -104,6 +105,9 @@ class _PdfviewState extends State<Pdfview> {
   }
 
   void voiceManager(Map voice) async {
+    setState(() {
+      playButtonIsDisabled = true;
+    });
     final bool tempPause = pause;
     final bool tempPlay = play;
     await pauseManager();
@@ -168,13 +172,16 @@ class _PdfviewState extends State<Pdfview> {
               children: [
                 speakerSelector(),
                 GestureDetector(
-                  onTap: () {
-                    if (play && !pause) {
-                      pauseManager();
-                    } else if (!play && pause) {
-                      startManager();
-                    }
-                  },
+                  onTap:
+                      playButtonIsDisabled
+                          ? null
+                          : () {
+                            if (play && !pause) {
+                              pauseManager();
+                            } else if (!play && pause) {
+                              startManager();
+                            }
+                          },
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: ShapeDecoration(
@@ -184,31 +191,39 @@ class _PdfviewState extends State<Pdfview> {
                     child: currentIcon,
                   ),
                 ),
-                Slider(
-                  value: pitch,
-                  onChanged: (newRating) {
-                    setState(() {
-                      pitch = newRating;
-                      flutterTts.setPitch(pitch);
-                    });
-                  },
-                  min: 0.5,
-                  max: 2.0,
-                  divisions: 6,
-                  label: "Pitch:$pitch",
-                ),
-                Slider(
-                  value: speechRate,
-                  onChanged: (newRating) {
-                    setState(() {
-                      speechRate = newRating;
-                      flutterTts.setSpeechRate(speechRate);
-                    });
-                  },
-                  min: 0.0,
-                  max: 2.0,
-                  divisions: 8,
-                  label: "Speech Rate:$speechRate",
+                Row(
+                  children: [
+                    Expanded(
+                      child: Slider(
+                        value: pitch,
+                        onChanged: (newRating) {
+                          setState(() {
+                            pitch = newRating;
+                            flutterTts.setPitch(pitch);
+                          });
+                        },
+                        min: 0.5,
+                        max: 2.0,
+                        divisions: 6,
+                        label: "Pitch:$pitch",
+                      ),
+                    ),
+                    Expanded(
+                      child: Slider(
+                        value: speechRate,
+                        onChanged: (newRating) {
+                          setState(() {
+                            speechRate = newRating;
+                            flutterTts.setSpeechRate(speechRate);
+                          });
+                        },
+                        min: 0.0,
+                        max: 2.0,
+                        divisions: 8,
+                        label: "Speech Rate:$speechRate",
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
