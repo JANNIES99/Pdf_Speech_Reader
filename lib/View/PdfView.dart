@@ -127,6 +127,16 @@ class _PdfviewState extends State<Pdfview> {
     });
   }
 
+  void pitchManager(double pitch) async {
+    final bool tempPause = pause;
+    final bool tempPlay = play;
+    await pauseManager();
+    await flutterTts.setPitch(pitch);
+    if (tempPlay && !tempPause) {
+      await startManager();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
