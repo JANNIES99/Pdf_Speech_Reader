@@ -137,6 +137,16 @@ class _PdfviewState extends State<Pdfview> {
     }
   }
 
+  void speechRateManager(double speechRate) async {
+    final bool tempPause = pause;
+    final bool tempPlay = play;
+    await pauseManager();
+    await flutterTts.setSpeechRate(speechRate);
+    if (tempPlay && !tempPause) {
+      await startManager();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
