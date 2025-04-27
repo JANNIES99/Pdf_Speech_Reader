@@ -14,7 +14,6 @@ class _PdfviewState extends State<Pdfview> {
   FlutterTts flutterTts = FlutterTts();
   bool play = false;
   bool pause = true;
-  bool playButtonIsDisabled = false;
   double pitch = 1.0;
   double speechRate = 1.0;
   int previousWordStart = 0;
@@ -77,12 +76,8 @@ class _PdfviewState extends State<Pdfview> {
     if (!play && pause) {
       pause = !pause;
       play = !play;
-      setState(() {
-        playButtonIsDisabled = true;
-      });
       await flutterTts.speak(ttsInput.substring(previousWordStart));
       setState(() {
-        playButtonIsDisabled = false;
         currentIcon = pauseIcon;
       });
     }
@@ -109,9 +104,6 @@ class _PdfviewState extends State<Pdfview> {
   }
 
   void voiceManager(Map voice) async {
-    setState(() {
-      playButtonIsDisabled = true;
-    });
     final bool tempPause = pause;
     final bool tempPlay = play;
     await pauseManager();
@@ -122,9 +114,6 @@ class _PdfviewState extends State<Pdfview> {
     if (tempPlay && !tempPause) {
       await startManager();
     }
-    setState(() {
-      playButtonIsDisabled = false;
-    });
   }
 
   void pitchManager(double pitch) async {
@@ -199,16 +188,13 @@ class _PdfviewState extends State<Pdfview> {
               children: [
                 speakerSelector(),
                 GestureDetector(
-                  onTap:
-                      playButtonIsDisabled
-                          ? null
-                          : () {
-                            if (play && !pause) {
-                              pauseManager();
-                            } else if (!play && pause) {
-                              startManager();
-                            }
-                          },
+                  onTap: () {
+                    if (play && !pause) {
+                      pauseManager();
+                    } else if (!play && pause) {
+                      startManager();
+                    }
+                  },
                   child: Container(
                     padding: EdgeInsets.all(10),
                     decoration: ShapeDecoration(
