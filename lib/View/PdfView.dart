@@ -61,13 +61,28 @@ class _PdfviewState extends State<Pdfview> {
       try {
         voices = List<Map>.from(data);
         voices = voices.where((voice) => voice["name"].contains("en")).toList();
-        print(voices);
         setState(() {
           currentVoice = voices.first;
           setVoice(currentVoice!);
         });
       } catch (e) {
-        print(e);
+        String exceptionMessage = "";
+        if (e.toString().length > 30) {
+          exceptionMessage = "${e.toString().substring(0, 30)}...";
+        }
+        ScaffoldMessenger.of(context).clearSnackBars();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            duration: Duration(seconds: 3),
+            backgroundColor: Colors.red,
+            margin: EdgeInsets.all(10),
+            content: Text(
+              exceptionMessage,
+              style: TextStyle(color: Colors.black),
+            ),
+            behavior: SnackBarBehavior.floating,
+          ),
+        );
       }
     });
   }

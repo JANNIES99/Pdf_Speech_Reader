@@ -46,7 +46,7 @@ class _HomeviewState extends State<Homeview> {
         final int length = e.toString().length;
         String exceptionText = e.toString();
         if (length > 30) {
-          exceptionText = exceptionText.substring(0, 30);
+          exceptionText = "${e.toString().substring(0, 30)}...";
         }
         setState(() {
           isLoading = false;
