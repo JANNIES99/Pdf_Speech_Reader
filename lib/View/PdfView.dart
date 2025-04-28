@@ -154,109 +154,122 @@ class _PdfviewState extends State<Pdfview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text("PDF TTS View")),
+      // appBar: AppBar(
+      //   title: Text("PDF TTS View", style: TextStyle(color: Colors.white)),
+      //   backgroundColor: Colors.black,
+      // ),
       backgroundColor: Colors.black,
-      body: Column(
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        style: TextStyle(fontSize: 20, color: Colors.white),
-                        children: <TextSpan>[
-                          TextSpan(
-                            text: ttsInput.substring(0, currentWordStart),
-                          ),
-                          if (currentWordStart != null)
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Padding(
+                  padding: EdgeInsets.all(10),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      RichText(
+                        text: TextSpan(
+                          style: TextStyle(fontSize: 20, color: Colors.white),
+                          children: <TextSpan>[
                             TextSpan(
-                              style: TextStyle(
-                                fontSize: 20,
-                                color: Colors.black,
-                                backgroundColor: Colors.purpleAccent,
-                              ),
-                              text: ttsInput.substring(
-                                currentWordStart!,
-                                currentWordEnd,
-                              ),
+                              text: ttsInput.substring(0, currentWordStart),
                             ),
-                          if (currentWordEnd != null)
-                            TextSpan(text: ttsInput.substring(currentWordEnd!)),
-                        ],
+                            if (currentWordStart != null)
+                              TextSpan(
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.black,
+                                  backgroundColor: Colors.purpleAccent,
+                                ),
+                                text: ttsInput.substring(
+                                  currentWordStart!,
+                                  currentWordEnd,
+                                ),
+                              ),
+                            if (currentWordEnd != null)
+                              TextSpan(
+                                text: ttsInput.substring(currentWordEnd!),
+                              ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Container(
-            padding: EdgeInsets.all(15),
-            width: double.infinity,
-            color: Colors.red,
-            child: Column(
-              children: [
-                speakerSelector(),
-                GestureDetector(
-                  onTap: () {
-                    if (play && !pause) {
-                      pauseManager();
-                    } else if (!play && pause) {
-                      startManager();
-                    }
-                  },
-                  child: Container(
-                    padding: EdgeInsets.all(10),
-                    decoration: ShapeDecoration(
-                      shape: CircleBorder(),
-                      color: Colors.white,
+            Container(
+              padding: EdgeInsets.all(5),
+              width: double.infinity,
+              color: Colors.red,
+              child: Column(
+                children: [
+                  speakerSelector(),
+                  const SizedBox(height: 5),
+                  GestureDetector(
+                    onTap: () {
+                      if (play && !pause) {
+                        pauseManager();
+                      } else if (!play && pause) {
+                        startManager();
+                      }
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      decoration: ShapeDecoration(
+                        shape: CircleBorder(),
+                        color: Colors.white,
+                      ),
+                      child: currentIcon,
                     ),
-                    child: currentIcon,
                   ),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: Slider(
-                        value: pitch,
-                        onChanged: (newRating) {
-                          setState(() {
-                            pitch = newRating;
-                            flutterTts.setPitch(pitch);
-                          });
-                        },
-                        min: 0.5,
-                        max: 2.0,
-                        divisions: 6,
-                        label: "Pitch:$pitch",
+                  const SizedBox(height: 5),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Slider(
+                          value: pitch,
+                          onChanged: (newRating) {
+                            setState(() {
+                              pitch = newRating;
+                              flutterTts.setPitch(pitch);
+                            });
+                          },
+                          min: 0.5,
+                          max: 2.0,
+                          divisions: 6,
+                          label: "Pitch:$pitch",
+                        ),
                       ),
-                    ),
-                    Expanded(
-                      child: Slider(
-                        value: speechRate,
-                        onChanged: (newRating) {
-                          setState(() {
-                            speechRate = newRating;
-                            flutterTts.setSpeechRate(speechRate);
-                          });
-                        },
-                        min: 0.0,
-                        max: 2.0,
-                        divisions: 8,
-                        label: "Speech Rate:$speechRate",
+                      IconButton(
+                        onPressed: () {},
+                        icon: Icon(Icons.replay_rounded, color: Colors.black),
                       ),
-                    ),
-                  ],
-                ),
-              ],
+                      Expanded(
+                        child: Slider(
+                          value: speechRate,
+                          onChanged: (newRating) {
+                            setState(() {
+                              speechRate = newRating;
+                              flutterTts.setSpeechRate(speechRate);
+                            });
+                          },
+                          min: 0.0,
+                          max: 2.0,
+                          divisions: 8,
+                          label: "Speech Rate:$speechRate",
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
