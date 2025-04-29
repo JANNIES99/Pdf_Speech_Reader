@@ -151,6 +151,19 @@ class _PdfviewState extends State<Pdfview> {
     }
   }
 
+  void replayManager() async {
+    final bool tempPause = pause;
+    final bool tempPlay = play;
+    await pauseManager();
+    setState(() {
+      previousWordStart = 0;
+      previousWordEnd = 0;
+    });
+    if (tempPlay && !tempPause) {
+      await startManager();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
