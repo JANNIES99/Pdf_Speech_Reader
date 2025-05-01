@@ -167,10 +167,6 @@ class _PdfviewState extends State<Pdfview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: Text("PDF TTS View", style: TextStyle(color: Colors.white)),
-      //   backgroundColor: Colors.black,
-      // ),
       backgroundColor: Colors.black,
       body: SafeArea(
         child: Column(
