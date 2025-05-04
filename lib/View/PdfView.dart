@@ -87,7 +87,7 @@ class _PdfviewState extends State<Pdfview> {
     });
   }
 
-  Future<void> startManager() async {
+  Future<void> startManager(String text) async {
     if (!play && pause) {
       pause = !pause;
       play = !play;
@@ -105,9 +105,9 @@ class _PdfviewState extends State<Pdfview> {
       await flutterTts.pause();
       setState(() {
         currentIcon = playIcon;
+        previousWordStart = currentWordStart ?? 0;
+        previousWordEnd = currentWordEnd ?? 0;
       });
-      previousWordStart = currentWordStart ?? 0;
-      previousWordEnd = currentWordEnd ?? 0;
     }
   }
 
@@ -127,7 +127,7 @@ class _PdfviewState extends State<Pdfview> {
       "locale": voice["locale"],
     });
     if (tempPlay && !tempPause) {
-      await startManager();
+      await startManager(ttsInput.substring(previousWordStart));
     }
   }
 
@@ -137,7 +137,7 @@ class _PdfviewState extends State<Pdfview> {
     await pauseManager();
     await flutterTts.setPitch(pitch);
     if (tempPlay && !tempPause) {
-      await startManager();
+      await startManager(ttsInput.substring(previousWordStart));
     }
   }
 
@@ -147,7 +147,7 @@ class _PdfviewState extends State<Pdfview> {
     await pauseManager();
     await flutterTts.setSpeechRate(speechRate);
     if (tempPlay && !tempPause) {
-      await startManager();
+      await startManager(ttsInput.substring(previousWordStart));
     }
   }
 
@@ -160,7 +160,7 @@ class _PdfviewState extends State<Pdfview> {
       previousWordEnd = 0;
     });
     if (tempPlay && !tempPause) {
-      await startManager();
+      await startManager(ttsInput.substring(previousWordStart));
     }
   }
 
@@ -224,7 +224,7 @@ class _PdfviewState extends State<Pdfview> {
                       if (play && !pause) {
                         pauseManager();
                       } else if (!play && pause) {
-                        startManager();
+                        startManager(ttsInput.substring(previousWordStart));
                       }
                     },
                     child: Container(
