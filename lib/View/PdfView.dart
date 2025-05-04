@@ -179,8 +179,9 @@ class _PdfviewState extends State<Pdfview> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      RichText(
-                        text: TextSpan(
+                      SelectableText.rich(
+                        onSelectionChanged: (selection, cause) {},
+                        TextSpan(
                           style: TextStyle(fontSize: 20, color: Colors.white),
                           children: <TextSpan>[
                             TextSpan(
