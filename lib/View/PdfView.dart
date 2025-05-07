@@ -180,7 +180,7 @@ class _PdfviewState extends State<Pdfview> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SelectableText.rich(
-                        contextMenuBuilder: (context, editableTextState) {},
+                        //contextMenuBuilder: (context, editableTextState) {},
                         TextSpan(
                           style: TextStyle(fontSize: 20, color: Colors.white),
                           children: <TextSpan>[
