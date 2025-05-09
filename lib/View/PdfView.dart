@@ -180,7 +180,27 @@ class _PdfviewState extends State<Pdfview> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       SelectableText.rich(
-                        //contextMenuBuilder: (context, editableTextState) {},
+                        contextMenuBuilder: (context, editableTextState) {
+                          final TextEditingValue value =
+                              editableTextState.textEditingValue;
+                          final String selectedText = value.selection
+                              .textInside(value.text);
+                          return AdaptiveTextSelectionToolbar.buttonItems(
+                            buttonItems:
+                                editableTextState.contextMenuButtonItems..add(
+                                  ContextMenuButtonItem(
+                                    onPressed: () {
+                                      setState(() {
+                                        previousWordStart = 0;
+                                        previousWordEnd = 0;
+                                      });
+                                      startManager(selectedText);
+                                    },
+                                  ),
+                                ),
+                            anchors: editableTextState.contextMenuAnchors,
+                          );
+                        },
                         TextSpan(
                           style: TextStyle(fontSize: 20, color: Colors.white),
                           children: <TextSpan>[
