@@ -191,11 +191,24 @@ class _PdfviewState extends State<Pdfview> {
                                   ContextMenuButtonItem(
                                     label: "Read-Aloud",
                                     onPressed: () {
-                                      setState(() {
-                                        previousWordStart = 0;
-                                        previousWordEnd = 0;
-                                      });
-                                      startManager(selectedText);
+                                      final int startingIndex = ttsInput
+                                          .indexOf(selectedText);
+                                      if (selectedText == "" ||
+                                          selectedText == " " ||
+                                          startingIndex == -1) {
+                                        setState(() {
+                                          previousWordStart = 0;
+                                          previousWordEnd = 0;
+                                        });
+                                      } else {
+                                        pauseManager();
+                                        startManager(
+                                          ttsInput.substring(
+                                            startingIndex,
+                                            startingIndex + selectedText.length,
+                                          ),
+                                        );
+                                      }
                                     },
                                   ),
                                 ),
