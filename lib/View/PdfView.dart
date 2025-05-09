@@ -181,37 +181,42 @@ class _PdfviewState extends State<Pdfview> {
                     children: [
                       SelectableText.rich(
                         contextMenuBuilder: (context, editableTextState) {
-                          final TextEditingValue value =
-                              editableTextState.textEditingValue;
-                          final String selectedText = value.selection
-                              .textInside(value.text);
+                          // final TextEditingValue value =
+                          //     editableTextState.textEditingValue;
+                          // final String selectedText = value.selection
+                          //     .textInside(value.text);
                           return AdaptiveTextSelectionToolbar.buttonItems(
                             buttonItems:
-                                editableTextState.contextMenuButtonItems..add(
-                                  ContextMenuButtonItem(
-                                    label: "Read-Aloud",
-                                    onPressed: () {
-                                      final int startingIndex = ttsInput
-                                          .indexOf(selectedText);
-                                      if (selectedText == "" ||
-                                          selectedText == " " ||
-                                          startingIndex == -1) {
-                                        setState(() {
-                                          previousWordStart = 0;
-                                          previousWordEnd = 0;
-                                        });
-                                      } else {
-                                        pauseManager();
-                                        startManager(
-                                          ttsInput.substring(
-                                            startingIndex,
-                                            startingIndex + selectedText.length,
-                                          ),
-                                        );
-                                      }
-                                    },
-                                  ),
-                                ),
+                                editableTextState.contextMenuButtonItems,
+                            // ..add(
+                            //   ContextMenuButtonItem(
+                            //     label: "Read-Aloud",
+                            //     onPressed: () {
+                            //       final int startingIndex = ttsInput
+                            //           .indexOf(selectedText);
+                            //       if (selectedText == "" ||
+                            //           selectedText == " " ||
+                            //           startingIndex == -1) {
+                            //         setState(() {
+                            //           previousWordStart = 0;
+                            //           previousWordEnd = 0;
+                            //         });
+                            //       } else {
+                            //         setState(() {
+                            //           previousWordStart = startingIndex;
+                            //           previousWordEnd = startingIndex;
+                            //         });
+                            //         pauseManager();
+                            //         startManager(
+                            //           ttsInput.substring(
+                            //             startingIndex,
+                            //             startingIndex + selectedText.length,
+                            //           ),
+                            //         );
+                            //       }
+                            //     },
+                            //   ),
+                            // ),
                             anchors: editableTextState.contextMenuAnchors,
                           );
                         },
