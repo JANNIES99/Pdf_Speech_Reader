@@ -189,6 +189,7 @@ class _PdfviewState extends State<Pdfview> {
                             buttonItems:
                                 editableTextState.contextMenuButtonItems..add(
                                   ContextMenuButtonItem(
+                                    label: "Read-Aloud",
                                     onPressed: () {
                                       setState(() {
                                         previousWordStart = 0;
