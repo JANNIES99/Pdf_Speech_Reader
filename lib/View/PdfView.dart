@@ -188,35 +188,6 @@ class _PdfviewState extends State<Pdfview> {
                           return AdaptiveTextSelectionToolbar.buttonItems(
                             buttonItems:
                                 editableTextState.contextMenuButtonItems,
-                            // ..add(
-                            //   ContextMenuButtonItem(
-                            //     label: "Read-Aloud",
-                            //     onPressed: () {
-                            //       final int startingIndex = ttsInput
-                            //           .indexOf(selectedText);
-                            //       if (selectedText == "" ||
-                            //           selectedText == " " ||
-                            //           startingIndex == -1) {
-                            //         setState(() {
-                            //           previousWordStart = 0;
-                            //           previousWordEnd = 0;
-                            //         });
-                            //       } else {
-                            //         setState(() {
-                            //           previousWordStart = startingIndex;
-                            //           previousWordEnd = startingIndex;
-                            //         });
-                            //         pauseManager();
-                            //         startManager(
-                            //           ttsInput.substring(
-                            //             startingIndex,
-                            //             startingIndex + selectedText.length,
-                            //           ),
-                            //         );
-                            //       }
-                            //     },
-                            //   ),
-                            // ),
                             anchors: editableTextState.contextMenuAnchors,
                           );
                         },
