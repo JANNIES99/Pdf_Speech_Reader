@@ -181,10 +181,6 @@ class _PdfviewState extends State<Pdfview> {
                     children: [
                       SelectableText.rich(
                         contextMenuBuilder: (context, editableTextState) {
-                          // final TextEditingValue value =
-                          //     editableTextState.textEditingValue;
-                          // final String selectedText = value.selection
-                          //     .textInside(value.text);
                           return AdaptiveTextSelectionToolbar.buttonItems(
                             buttonItems:
                                 editableTextState.contextMenuButtonItems,
