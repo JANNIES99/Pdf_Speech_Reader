@@ -50,6 +50,7 @@ class _PdfviewState extends State<Pdfview> {
   }
 
   void initTTS() {
+    print("Hello");
     ttsInput = widget.listOfText[0];
     flutterTts.setProgressHandler((text, start, end, word) {
       setState(() {
