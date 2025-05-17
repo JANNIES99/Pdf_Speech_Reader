@@ -87,7 +87,8 @@ class _PdfviewState extends State<Pdfview> {
       }
     });
   }
-//f
+
+  //f
   Future<void> startManager(String text) async {
     if (!play && pause) {
       pause = !pause;
