@@ -14,6 +14,7 @@ class _PdfviewState extends State<Pdfview> {
   FlutterTts flutterTts = FlutterTts();
   bool play = false;
   bool pause = true;
+  int index = 0;
   double pitch = 1.0;
   double speechRate = 1.0;
   int previousWordStart = 0;
@@ -51,7 +52,7 @@ class _PdfviewState extends State<Pdfview> {
 
   void initTTS() {
     print("Hello");
-    ttsInput = widget.listOfText[0];
+    ttsInput = widget.listOfText[index];
     flutterTts.setProgressHandler((text, start, end, word) {
       setState(() {
         currentWordStart = previousWordStart + start;
@@ -88,7 +89,19 @@ class _PdfviewState extends State<Pdfview> {
     });
   }
 
-  
+  void nextPage() {
+    if (widget.listOfText.length > index) {
+      setState(() {
+        previousWordEnd = 0;
+        previousWordStart = 0;
+        currentWordEnd = 0;
+        currentWordStart = 0;
+        index++;
+        ttsInput = widget.listOfText[index];
+      });
+    }
+  }
+
   Future<void> startManager(String text) async {
     if (!play && pause) {
       pause = !pause;
