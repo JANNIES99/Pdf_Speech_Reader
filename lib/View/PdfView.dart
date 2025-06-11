@@ -102,6 +102,19 @@ class _PdfviewState extends State<Pdfview> {
     }
   }
 
+  void previousPage() {
+    if (0 <= index) {
+      setState(() {
+        previousWordEnd = 0;
+        previousWordStart = 0;
+        currentWordEnd = 0;
+        currentWordStart = 0;
+        index--;
+        ttsInput = widget.listOfText[index];
+      });
+    }
+  }
+
   Future<void> startManager(String text) async {
     if (!play && pause) {
       pause = !pause;
