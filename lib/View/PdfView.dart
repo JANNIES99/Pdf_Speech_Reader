@@ -191,7 +191,7 @@ class _PdfviewState extends State<Pdfview> {
       await startManager(ttsInput.substring(previousWordStart));
     }
   }
-
+//
   @override
   Widget build(BuildContext context) {
     return Scaffold(
