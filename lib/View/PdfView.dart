@@ -8,7 +8,6 @@ class Pdfview extends StatefulWidget {
   @override
   State<Pdfview> createState() => _PdfviewState();
 }
-//
 
 class _PdfviewState extends State<Pdfview> {
   late String ttsInput;
