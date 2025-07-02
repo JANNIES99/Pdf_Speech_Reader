@@ -204,6 +204,13 @@ class _PdfviewState extends State<Pdfview> {
           children: [
             Expanded(
               child: GestureDetector(
+                onHorizontalDragEnd: (details) {
+                  if (details.primaryVelocity! > 0) {
+                    previousPage();
+                  } else {
+                    nextPage();
+                  }
+                },
                 child: SingleChildScrollView(
                   child: Padding(
                     padding: EdgeInsets.all(10),
