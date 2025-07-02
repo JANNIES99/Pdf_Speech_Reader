@@ -8,6 +8,7 @@ class Pdfview extends StatefulWidget {
   @override
   State<Pdfview> createState() => _PdfviewState();
 }
+
 //first
 class _PdfviewState extends State<Pdfview> {
   late String ttsInput;
@@ -90,7 +91,8 @@ class _PdfviewState extends State<Pdfview> {
   }
 
   void nextPage() {
-    if (widget.listOfText.length > index) {
+    if (widget.listOfText.length > index + 1) {
+      pauseManager();
       setState(() {
         previousWordEnd = 0;
         previousWordStart = 0;
@@ -104,6 +106,7 @@ class _PdfviewState extends State<Pdfview> {
 
   void previousPage() {
     if (0 <= index) {
+      pauseManager();
       setState(() {
         previousWordEnd = 0;
         previousWordStart = 0;
@@ -200,47 +203,49 @@ class _PdfviewState extends State<Pdfview> {
         child: Column(
           children: [
             Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: EdgeInsets.all(10),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      SelectableText.rich(
-                        contextMenuBuilder: (context, editableTextState) {
-                          return AdaptiveTextSelectionToolbar.buttonItems(
-                            buttonItems:
-                                editableTextState.contextMenuButtonItems,
-                            anchors: editableTextState.contextMenuAnchors,
-                          );
-                        },
-                        TextSpan(
-                          style: TextStyle(fontSize: 20, color: Colors.white),
-                          children: <TextSpan>[
-                            TextSpan(
-                              text: ttsInput.substring(0, currentWordStart),
-                            ),
-                            if (currentWordStart != null)
+              child: GestureDetector(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.all(10),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SelectableText.rich(
+                          contextMenuBuilder: (context, editableTextState) {
+                            return AdaptiveTextSelectionToolbar.buttonItems(
+                              buttonItems:
+                                  editableTextState.contextMenuButtonItems,
+                              anchors: editableTextState.contextMenuAnchors,
+                            );
+                          },
+                          TextSpan(
+                            style: TextStyle(fontSize: 20, color: Colors.white),
+                            children: <TextSpan>[
                               TextSpan(
-                                style: TextStyle(
-                                  fontSize: 20,
-                                  color: Colors.black,
-                                  backgroundColor: Colors.purpleAccent,
-                                ),
-                                text: ttsInput.substring(
-                                  currentWordStart!,
-                                  currentWordEnd,
-                                ),
+                                text: ttsInput.substring(0, currentWordStart),
                               ),
-                            if (currentWordEnd != null)
-                              TextSpan(
-                                text: ttsInput.substring(currentWordEnd!),
-                              ),
-                          ],
+                              if (currentWordStart != null)
+                                TextSpan(
+                                  style: TextStyle(
+                                    fontSize: 20,
+                                    color: Colors.black,
+                                    backgroundColor: Colors.purpleAccent,
+                                  ),
+                                  text: ttsInput.substring(
+                                    currentWordStart!,
+                                    currentWordEnd,
+                                  ),
+                                ),
+                              if (currentWordEnd != null)
+                                TextSpan(
+                                  text: ttsInput.substring(currentWordEnd!),
+                                ),
+                            ],
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -251,6 +256,9 @@ class _PdfviewState extends State<Pdfview> {
               color: Colors.red,
               child: Column(
                 children: [
+                  LinearProgressIndicator(
+                    value: (index + 1) / widget.listOfText.length,
+                  ),
                   speakerSelector(),
                   const SizedBox(height: 5),
                   GestureDetector(
