@@ -193,7 +193,7 @@ class _PdfviewState extends State<Pdfview> {
     if (tempPlay && !tempPause) {
       await startManager(ttsInput.substring(previousWordStart));
     }
-  }
+  }//
 
   @override
   Widget build(BuildContext context) {
